@@ -4,27 +4,18 @@ from random import randint
 class Velha:
     def __init__(self):
         self.__velha = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
-        self.__historico_x = []
-        self.__historico_o = []
 
     def reultado(self):
-        for j in range(2):
-            for i in range(len(self.__historico_o)):
-                cont = 0
-                for h in self.__historico_o:
-                    if self.__historico_o[i][j] in h:
-                        cont += 1
-                    if cont == 3:
-                        return True
+        for i in range(3):
+            if self.__velha[i][0] == self.__velha[i][1] == self.__velha[i][2] != ' ':
+                return True
+            if self.__velha[0][i] == self.__velha[1][i] == self.__velha[2][i] != ' ':
+                return True
 
-        for j in range(2):
-            for i in range(len(self.__historico_x)):
-                cont = 0
-                for h in self.__historico_x:
-                    if self.__historico_x[i][j] in h:
-                        cont += 1
-                    if cont == 3:
-                        return True
+        if self.__velha[0][0] == self.__velha[1][1] == self.__velha[2][2] != ' ':
+            return True
+        if self.__velha[0][2] == self.__velha[1][1] == self.__velha[2][0] != ' ':
+            return True
         return False
 
     def coo_alfabetica(self, letra):
@@ -70,25 +61,13 @@ class Velha:
     def jogada_x(self, posicao: str):
         coordenadas = self.posicao_valida(posicao)
         self.__velha[coordenadas[0]][coordenadas[1]] = "X"
-        self.__historico_x.append(posicao)
-        if self.reultado():
-            print(self)
-            self.__historico_x.clear()
-            self.__historico_o.clear()
-            self.__velha = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
 
     def jogada_o(self, posicao: str):
         coordenadas = self.posicao_valida(posicao)
         self.__velha[coordenadas[0]][coordenadas[1]] = "O"
-        self.__historico_o.append(posicao)
-        if self.reultado():
-            print(self)
-            self.__historico_x.clear()
-            self.__historico_o.clear()
-            self.__velha = [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]]
 
     def __str__(self):
-        return ("   1   2   3\n" +
+        return ("\n   1   2   3\n" +
                 f"a  {self.__velha[0][0]} | {self.__velha[0][1]} | {self.__velha[0][2]} \n" +
                 f"b  {self.__velha[1][0]} | {self.__velha[1][1]} | {self.__velha[1][2]} \n" +
                 f"c  {self.__velha[2][0]} | {self.__velha[2][1]} | {self.__velha[2][2]} \n")
@@ -96,10 +75,25 @@ class Velha:
 
 if __name__ == "__main__":
     velha = Velha()
-    while True:
-        try:
-            velha.jogada_x(input("X: "))
-            velha.jogada_o(input("O: "))
-        except Exception as err:
-            print(err)
+    print(velha)
+    for _ in range(9):
+        while True:
+            try:
+                velha.jogada_x(input("X: "))
+                break
+            except Exception as err:
+                print(err)
         print(velha)
+        if velha.reultado():
+            break
+        while True:
+            try:
+                velha.jogada_o(input("O: "))
+                break
+            except Exception as err:
+                print(err)
+        print(velha)
+        if velha.reultado():
+            break
+
+
